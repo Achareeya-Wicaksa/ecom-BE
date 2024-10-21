@@ -1,0 +1,52 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  role      String   @default("user") // role default adalah user
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cart      Cart?    @relation(fields: [cartId], references: [id])
+  order     Order?   @relation(fields: [orderId], references: [id])
+  product   Product? @relation(fields: [productId], references: [id])
+
+  cartId    Int?
+  orderId   Int?
+  productId Int?
+}
+
+model Cart {
+  id     Int    @id @default(autoincrement())
+  user   User[]
+}
+
+model Order {
+  id     Int    @id @default(autoincrement())
+  user   User[]
+}
+
+model Product {
+  id                Int      @id @default(autoincrement())
+  productName      String
+  productDescription String
+  productBrand     String
+  productWeight    Float
+  productStock     Int
+  productImage     String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+    users  User[]
+
+}
