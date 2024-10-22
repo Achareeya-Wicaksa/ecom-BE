@@ -7,6 +7,9 @@ import { UserService } from './user/user.service';
 import { UserController } from './user/user.controller';
 import { UserModule } from './user/user.module';
 import { JwtModule } from '@nestjs/jwt';
+import { CartService } from './cart/cart.service';
+import { CartController } from './cart/cart.controller';
+import { CartModule } from './cart/cart.module';
 
 
 @Module({
@@ -15,12 +18,14 @@ import { JwtModule } from '@nestjs/jwt';
     ProductsModule,
     AuthModule,
     UserModule,
+    CartModule,
     JwtModule.register({
-      secret: 'your_jwt_secret', // Ganti dengan secret yang lebih aman
-      signOptions: { expiresIn: '60s' }, // Sesuaikan waktu kedaluwarsa token
+      secret: 'secret', 
+      signOptions: { expiresIn: '1h' }, 
     }),
+    CartModule,
   ],
-  controllers: [UserController],
-  providers: [UserService],
+  controllers: [UserController, CartController],
+  providers: [UserService, CartService],
 })
 export class AppModule {}

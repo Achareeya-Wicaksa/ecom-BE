@@ -14,7 +14,6 @@ export class UserController {
   @Post('login')
   async login(@Body() loginDto: { email: string; password: string }) {
     // Pastikan email dan password terdefinisi
-    console.log('Login DTO:', loginDto);
     return this.userService.login(loginDto.email, loginDto.password);
   }
 }

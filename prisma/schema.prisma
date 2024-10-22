@@ -17,18 +17,29 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  cart      Cart?    @relation(fields: [cartId], references: [id])
+  cart      Cart?    @relation("UserCart")
+
   order     Order?   @relation(fields: [orderId], references: [id])
   product   Product? @relation(fields: [productId], references: [id])
 
-  cartId    Int?
   orderId   Int?
   productId Int?
 }
 
 model Cart {
-  id     Int    @id @default(autoincrement())
-  user   User[]
+  id              Int      @id @default(autoincrement())
+  userId          Int      @unique // Satu user hanya bisa memiliki satu cart
+  productId       Int
+  productQuantity Int
+
+  // Relasi ke User
+  user            User     @relation("UserCart", fields: [userId], references: [id])
+
+  // Relasi ke Product
+  product         Product  @relation(fields: [productId], references: [id])
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 model Order {
@@ -48,5 +59,6 @@ model Product {
   updatedAt        DateTime @updatedAt
 
     users  User[]
+    carts             Cart[]
 
 }
