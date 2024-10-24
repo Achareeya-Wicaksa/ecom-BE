@@ -23,18 +23,23 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    console.log('JWT Payload:', payload); // Tambahkan ini untuk debugging
-
-    const user = await this.prisma.user.findUnique({
-      where: { id: payload.sub },
-    });
-
-    if (!user) {
-        console.log('User not found!'); // Log jika user tidak ditemukan
-
-      throw new UnauthorizedException();
+    console.log('JWT Payload:', payload); // Debug untuk melihat payload
+  
+    // Gunakan payload.id, bukan payload.sub
+    if (!payload.id) {
+      throw new UnauthorizedException('Invalid JWT Payload: No user ID found');
     }
-
-    return { userId: user.id, email: user.email, role: user.role };
+  
+    const user = await this.prisma.user.findUnique({
+      where: { id: payload.id }, // Gunakan id dari payload.id
+    });
+  
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+  
+    return user;
   }
+  
+
 }

@@ -13,15 +13,16 @@ export class CartController {
   async addToCart(@Request() req, @Body() body) {
     console.log('User ID from Token:', req.user); // Log user dari token
     const { productId, productQuantity } = body;
-    return this.cartService.addToCart(req.user.userId, productId, productQuantity);
+    return this.cartService.addToCart(req.user.id, productId, productQuantity);
   }
 
+  
   
   @UseGuards(JwtAuthGuard)
   @Get()
   async getCart(@Request() req) {
-    console.log('User ID from JWT:', req.user.userId); // Cek ID user dari JWT
-    return this.cartService.getCartByUser(req.user.userId);
+    console.log('User ID from JWT:', req.user.id); // Cek ID user dari JWT
+    return this.cartService.getCartByUser(req.user.id);
   }
   
   

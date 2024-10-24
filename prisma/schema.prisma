@@ -17,7 +17,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  cart      Cart?    @relation("UserCart")
+  carts     Cart[]   @relation("UserCart")
 
   order     Order?   @relation(fields: [orderId], references: [id])
   product   Product? @relation(fields: [productId], references: [id])
@@ -28,7 +28,7 @@ model User {
 
 model Cart {
   id              Int      @id @default(autoincrement())
-  userId          Int      @unique // Satu user hanya bisa memiliki satu cart
+  userId          Int
   productId       Int
   productQuantity Int
 
@@ -40,7 +40,11 @@ model Cart {
 
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+
+  // Menambahkan constraint unik pada kombinasi userId dan productId
+  @@unique([userId, productId])  // <-- Tambahkan ini
 }
+
 
 model Order {
   id     Int    @id @default(autoincrement())
